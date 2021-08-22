@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Cleantho">
+    <title>Correios - Correios, o maior operador logístico do Brasil.</title>
+    <link rel="icon" type="image/png" href="https://www.correios.com.br/++theme++tema-do-portal-correios/static/imagens/favicon-32x32.png" sizes="32x32">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>    
+    <form action="funcao()" name="campo" id="campo">
+        <img src="https://www.correios.com.br/++theme++tema-do-portal-correios/static/imagens/correios.svg" alt="CORREIOS" id="logo">
+        <h1>Matriz Origem/Destino</h1>
+        <p id="data">Baseado na tabela de 31/01/2021.</p>
+        <fieldset><legend>Origem</legend>
+            <p><label for="origem">Estado:</label>
+            <select name="origem" id="origem" onchange="mudou()">
+                <option value="0">AC
+                </option><option value="1">AL 
+                </option><option value="2">AM 
+                </option><option value="3">AP 
+                </option><option value="4">BA 
+                </option><option value="5">CE 
+                </option><option value="6">DF 
+                </option><option value="7">ES 
+                </option><option value="8">GO 
+                </option><option value="9">MA 
+                </option><option value="10">MG 
+                </option><option value="11">MS 
+                </option><option value="12">MT 
+                </option><option value="13">PA 
+                </option><option value="14">PB 
+                </option><option value="15">PE 
+                </option><option value="16">PI 
+                </option><option value="17">PR 
+                </option><option value="18">RJ 
+                </option><option value="19" selected>RN 
+                </option><option value="20">RO 
+                </option><option value="21">RR 
+                </option><option value="22">RS 
+                </option><option value="23">SC 
+                </option><option value="24">SE 
+                </option><option value="25">SP 
+                </option><option value="26">TO
+                </option>
+            </select>
+            </p>
+            <p><input type="radio" name="ori" id="capOri" value="c" checked onchange="mudou()"><label for="capOri">Capital ou Região Metropolitana</label></p>
+            <p><input type="radio" name="ori" id="intOri" value="i" onchange="mudou()"><label for="intOri">Interior</label></p>	    
+	    </fieldset>
+	    <fieldset><legend>Destino</legend>
+            <p><label for="destino">Estado:</label>
+            <select name="destino" id="destino" onchange="mudou()">
+                <option value="0">AC
+                </option><option value="1">AL 
+                </option><option value="2">AM 
+                </option><option value="3">AP 
+                </option><option value="4">BA 
+                </option><option value="5">CE 
+                </option><option value="6">DF 
+                </option><option value="7">ES 
+                </option><option value="8">GO 
+                </option><option value="9">MA 
+                </option><option value="10">MG 
+                </option><option value="11">MS 
+                </option><option value="12">MT 
+                </option><option value="13">PA 
+                </option><option value="14">PB 
+                </option><option value="15">PE 
+                </option><option value="16">PI 
+                </option><option value="17">PR 
+                </option><option value="18">RJ 
+                </option><option value="19">RN 
+                </option><option value="20">RO 
+                </option><option value="21">RR 
+                </option><option value="22">RS 
+                </option><option value="23">SC 
+                </option><option value="24">SE 
+                </option><option value="25">SP 
+                </option><option value="26">TO
+                </option>
+            </select>
+            </p>
+            <p><input type="radio" name="dest" id="capDest" value="c" checked onchange="mudou()"><label for="capDest">Capital ou Região Metropolitana</label></p>
+            <p><input type="radio" name="dest" id="intDest" value="i" onchange="mudou()"><label for="intDest">Interior</label></p>
+        </fieldset>
+        <p id="bot"><input type="button" value=" Calcular " id="botao" onclick="funcao()"></p>
+    </form>
+<br>
+<div id="resultado"></div>
+</body>
+</html>
