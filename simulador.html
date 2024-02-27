@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Cleantho">
+    <link rel="shortcut icon" href="https://buscacepinter.correios.com.br/core/templates/bunker/img/favi-ect.png" />
+    <title>Simulador</title>
+    <style>
+        :root {
+            --height-header: 50px;
+            --height-footer: 18px;
+            --my-blue: #0078A5;
+            --my-yellow: #fdb603;
+            --my-navy: #033F68;
+            --my-gray: rgba(236, 229, 229, 0.9);
+            --tinted: rgba(0, 0, 0, .7);
+            --shadow: rgba(0, 0, 0, .4);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0px;
+            padding: 0px;
+            background-color: white;
+            color: var(--my-navy);
+        }
+
+        .basic {
+            width: 100%;
+            padding: 0px 6px 0px 6px;
+            background-color: var(--my-yellow);
+            font-family: Helvetica, Arial, sans-serif;
+            position: fixed;
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header {
+            top: 0px;
+            height: var(--height-header);
+        }
+
+        header h1 {
+            font-size: var(--height-header);
+        }
+
+        section {
+            margin: calc(15px + var(--height-header)) 0px calc(10px + var(--height-footer));
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        footer {
+            top: calc(100% - var(--height-footer));
+            height: var(--height-footer);
+            font-size: calc(var(--height-footer) - 6px);
+        }
+
+        .square {
+            width: 480px;
+            max-width: 480px;
+            min-width: 220px;
+            min-height: 320px;
+            margin: 5px;
+            background-color: var(--my-gray);
+            border: double 2px black;
+            box-shadow: 2px 2px 5px var(--shadow);
+        }
+
+        .title {
+            padding: 4px;
+            background-color: var(--my-yellow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #over {
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            padding: calc(15px + var(--height-header)) 0px calc(10px + var(--height-footer));
+            background-color: var(--tinted);
+            position: absolute;
+            top: 0;
+            display: none;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        label,
+        input {
+            margin: 0;
+            padding: 0px 2px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 22px;
+            text-align: right;
+            color: var(--my-navy);
+        }
+
+        input[type="button"]:hover,
+        input[type="reset"]:hover,
+        button:hover {
+            box-shadow: 0px 0px 5px var(--my-blue);
+        }
+
+        #folder {
+            width: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bolder;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .grid {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: auto auto auto;
+            row-gap: 10px;
+            column-gap: 2px;
+        }
+
+        .itemlabel {
+            grid-column-start: 2;
+            grid-column-end: 3;
+        }
+
+        .item {
+            grid-column-start: 3;
+            grid-column-end: 4;
+            width: 100%;
+        }
+
+        .item-button {
+            grid-column-start: 1;
+            grid-column-end: 4;
+            justify-self: center;
+        }
+
+        .left {
+            display: flex;
+            text-align: left;
+        }
+
+        #result {
+            padding: 20px;
+            display: none;
+            font-size: 60px;
+            color: var(--my-blue);
+        }
+
+        #result p {
+            margin: 2px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .yellow {
+            color: var(--my-yellow);
+        }
+
+        div[alert] {
+            width: 280px;
+            padding: 10px;
+            position: absolute;
+            top: calc(10px + var(--height-header));
+            right: 10px;
+            z-index: 10;
+            display: none;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 6px 6px 15px var(--shadow);
+            background-color: azure;
+            color: black;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        @media screen and (max-width: 490px) {
+            #result {
+                font-size: 12vw;
+            }
+
+            label,
+            input {
+                font-size: 4.5vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="basic">
+        <h1>Simulador</h1>
+    </header>
+
+    <section>
+        <form class="square grid">
+            <input type="button" id="folder" value="-"
+                title="Click no sinal '-' para esconder ou em '+' para mostrar a opção Pac.">
+            <label for="sedex" class="itemlabel" title="Serviço de Encomenda Expressa Nacional">Sedex:</label>
+            <input type="text" id="sedex" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
+                maxlength="9" inputmode="decimal" onchange="formatPrevious(this)" autofocus>
+            <label for="pac" id="labelpac" class="itemlabel" title="Pac - Prático, Acessível e Confiável">Pac:</label>
+            <input type="text" id="pac" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
+                maxlength="9" inputmode="decimal" onchange="formatPrevious(this)">
+            <label for="emb" class="itemlabel">Embalagem:</label>
+            <input type="text" id="emb" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
+                maxlength="6" inputmode="decimal" onchange="formatPrevious(this)">
+            <label for="valor" class="itemlabel" title="Valor da Mercadoria">Ad Valorem:</label>
+            <input type="text" id="valor" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
+                maxlength="9" inputmode="decimal" onchange="calculate(); formatPrevious(this);">
+            <div class="item left">
+                <input type="checkbox" id="ar" onchange="calculate()" checked>
+                <label for="ar" title="Aviso de Recebimeto">AR</label>
+            </div>
+            <div class="item left">
+                <input type="checkbox" id="mp" onchange="calculate()">
+                <label for="mp" title="Mão Própria">MP</label>
+            </div>
+            <div class="item-button">
+                <input type="button" id="config" value=" Configurar " title="Configuração do sistema">
+                <input type="reset" id="reset" value=" Limpar " title="Limpeza dos dados de entrada">
+                <input type="button" value=" Calcular " title="Cálculo dos valores acima" onclick="calculate()">
+            </div>
+        </form>
+        <div id="result" class="square">
+        </div>
+    </section>
+
+    <aside>
+        <div alert>
+        </div>
+        <div id="over">
+            <div class="square">
+                <div class="title">
+                    <strong>&#9881; Configuração</strong>
+                    <button onclick="closeSetup()">x</button>
+                </div>
+                <form class="grid">
+                    <label for="arValor" class="itemlabel">Taxa AR:</label>
+                    <input type="text" id="arValor" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
+                        maxlength="9" inputmode="decimal" onchange="formatPrevious(this); setup();">
+                    <label for="mpValor" class="itemlabel">Taxa MP:</label>
+                    <input type="text" id="mpValor" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
+                        maxlength="9" inputmode="decimal" onchange="formatPrevious(this); setup();">
+                    <label for="seguro" class="itemlabel">Seguro Padrão:</label>
+                    <input type="text" id="seguro" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
+                        maxlength="9" inputmode="decimal" onchange="formatPrevious(this); setup();">
+                    <label for="seguroMaxPac" class="itemlabel">Seguro Máx. Pac:</label>
+                    <input type="text" id="seguroMaxPac" class="item" autocomplete="off"
+                        onkeyup="decimalFormat(this, event)" maxlength="9" inputmode="decimal"
+                        onchange="formatPrevious(this); setup();">
+                    <label for="seguroMaxSedex" class="itemlabel">Seguro Máx. Sedex:</label>
+                    <input type="text" id="seguroMaxSedex" class="item" autocomplete="off"
+                        onkeyup="decimalFormat(this, event)" maxlength="9" inputmode="decimal"
+                        onchange="formatPrevious(this); setup();">
+                    <label for="porcentagem" class="itemlabel">Porcentagem do Seguro:</label>
+                    <input type="text" id="porcentagem" class="item" autocomplete="off"
+                        onkeyup="decimalFormat(this, event)" maxlength="9" inputmode="decimal"
+                        onchange="formatPrevious(this); setup();">
+                    <div class="item-button">
+                        <input type="button" value=" Fechar " onclick="closeSetup()">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </aside>
+
+    <footer class="basic">
+        <p>Desenvolvido por Cleantho</p>
+    </footer>
+
+    <script> // Alert window          
+        const alert = document.querySelector('[alert]');
+
+        function closeAlert() {
+            alert.style.display = 'none';
+            document.getElementById("sedex").focus();
+        }
+
+        const alertNew = (msn, time = 10000) => {
+            let html = `
+            <strong>Mensagem de Alerta:</strong>
+            <p>${msn}</p>
+            <button onclick="closeAlert()">Ok</button>`;
+            alert.innerHTML = html;
+            alert.style.display = 'block';
+            setTimeout(() => {
+                closeAlert();
+            }, time);
+        }
+    </script>
+
+    <script> // type conversion        
+        function stringToDecimal(value, separator) {
+            let reg = (separator == ',') ? /,/g : /\./g;
+            if (reg.test(value)) { // se já existir separador
+                let dif = value.length - value.indexOf(separator) - 1
+                if (separator == ',') {
+                    return Number.parseFloat(value.replaceAll('.', '').replace(',', '.')).toLocaleString("pt-BR", { style: "decimal", currency: "BRL", minimumFractionDigits: dif })
+                }
+                return Number.parseFloat(value.replaceAll(',', '')).toLocaleString("en-US", { style: "decimal", currency: "USA", minimumFractionDigits: dif })
+            } else {
+                if (separator == ',') {
+                    return Number.parseFloat(value.replaceAll('.', '').replace(',', '.')).toLocaleString("pt-BR", { style: "decimal", currency: "BRL", maximumFractionDigits: 2 })
+                }
+                return Number.parseFloat(value.replaceAll(',', '')).toLocaleString("en-US", { style: "decimal", currency: "USA", maximumFractionDigits: 2 })
+            }
+        }
+
+        function stringToFloat(value, separator) {
+            if (separator == ',') {
+                return Number.parseFloat(value.replaceAll('.', '').replace(',', '.'));
+            } else {
+                return Number.parseFloat(value.replaceAll(',', ''));
+            }
+        }
+
+        function floatToDecimal(value, separator, minDigit = 2) {
+            if (separator == ',') {
+                return value.toLocaleString("pt-BR", { style: "decimal", currency: "BRL", minimumFractionDigits: minDigit });
+            } else {
+                return value.toLocaleString("en-US", { style: "decimal", currency: "USA", minimumFractionDigits: minDigit });
+            }
+        }
+
+        function floatToMoney(value, coin) {
+            if (coin == 'br') {
+                return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 2 });
+            } else {
+                return value.toLocaleString("en-US", { style: "currency", currency: "USA", minimumFractionDigits: 2 });
+            }
+        }
+    </script>
+
+    <script> // Configuration window        
+        let arValor = 7.4;
+        let mpValor = 8.75;
+        let seguro = 24.5;
+        let seguroMaxPac = 4000.0;
+        let seguroMaxSedex = 34000.0;
+        let porcentagem = 2.0;
+        const separator = ',';
+        const coin = 'br';
+
+        const elementAr = document.getElementById('arValor');
+        const elementMp = document.getElementById('mpValor');
+        const elementSeguro = document.getElementById('seguro');
+        const elementMaxPac = document.getElementById('seguroMaxPac');
+        const elementMaxSed = document.getElementById('seguroMaxSedex');
+        const elementPorcentagem = document.getElementById('porcentagem');
+
+        let acess = false;
+        document.hasStorageAccess().then(permission => {
+            if (typeof (Storage) !== "undefined" && permission) { // Check browser support
+                acess = true;
+                if (localStorage.seguro) { // second access onwards
+                    arValor = Number(localStorage.arValor);
+                    mpValor = Number(localStorage.mpValor);
+                    seguro = Number(localStorage.seguro);
+                    seguroMaxPac = Number(localStorage.seguroMaxPac);
+                    seguroMaxSedex = Number(localStorage.seguroMaxSedex);
+                    porcentagem = Number(localStorage.porcentagem);
+                } else { // first access 
+                    localStorage.arValor = arValor;
+                    localStorage.mpValor = mpValor;
+                    localStorage.seguro = seguro;
+                    localStorage.seguroMaxPac = seguroMaxPac;
+                    localStorage.seguroMaxSedex = seguroMaxSedex;
+                    localStorage.porcentagem = porcentagem;
+                    setTimeout(() => {
+                        alertNew("Verifique se os valores de configuação estão corretos!", 6000)
+                    }, 500);
+                }
+            } else { // browser no support
+                setTimeout(() => {
+                    alertNew("Este navegador não suporta armazenamento local! <br>A configuração padrão será utilizada.")
+                }, 500);
+                elementAr.disabled = true;
+                elementMp.disabled = true;
+                elementSeguro.disabled = true;
+                elementMaxPac.disabled = true;
+                elementMaxSed.disabled = true;
+                elementPorcentagem.disabled = true;
+            }
+            elementAr.value = floatToDecimal(arValor, separator);
+            elementMp.value = floatToDecimal(mpValor, separator);
+            elementSeguro.value = floatToDecimal(seguro, separator);
+            elementMaxPac.value = floatToDecimal(seguroMaxPac, separator);
+            elementMaxSed.value = floatToDecimal(seguroMaxSedex, separator);
+            elementPorcentagem.value = floatToDecimal(porcentagem, separator);
+        });
+
+        function setup() {
+            if (acess) {
+                arValor = stringToFloat(elementAr.value, separator);
+                mpValor = stringToFloat(elementMp.value, separator);
+                seguro = stringToFloat(elementSeguro.value, separator);
+                seguroMaxPac = stringToFloat(elementMaxPac.value, separator);
+                seguroMaxSedex = stringToFloat(elementMaxSed.value, separator);
+                porcentagem = stringToFloat(elementPorcentagem.value, separator);
+                localStorage.arValor = arValor;
+                localStorage.mpValor = mpValor;
+                localStorage.seguro = seguro;
+                localStorage.seguroMaxPac = seguroMaxPac;
+                localStorage.seguroMaxSedex = seguroMaxSedex;
+                localStorage.porcentagem = porcentagem;
+            }
+        }
+
+        function closeSetup() {
+            document.getElementById("over").style.display = 'none';
+            document.getElementById("sedex").focus();
+        }
+    </script>
+
+    <script> // Main window    
+        let pacLine = true;
+        const folder = document.getElementById("folder")
+        folder.onclick = function () {
+            const labelPac = document.getElementById('labelpac');
+            const statusLabel = labelPac.style.display;
+            const inputPac = labelPac.nextElementSibling;
+            labelPac.style.display = statusLabel == 'none' ? 'block' : 'none';
+            inputPac.style.display = labelPac.style.display;
+            if (pacLine == true) {
+                folder.value = "+";
+                pacLine = false;
+            } else {
+                folder.value = "-";
+                pacLine = true;
+            }
+            calculate();
+        }
+
+        const sedex = document.getElementById("sedex");
+        const pac = document.getElementById("pac");
+        const embalagem = document.getElementById("emb");
+        const adValorem = document.getElementById("valor");
+        const ar = document.getElementById("ar");
+        const mp = document.getElementById("mp");
+        const result = document.getElementById("result");
+
+        adValorem.title = `Valor máximo permitido de ${floatToMoney(seguroMaxSedex, coin)}.\nSendo ${floatToMoney(seguroMaxSedex, coin)} para Sedex e ${floatToMoney(seguroMaxPac, coin)} para Pac. `;
+
+        document.getElementById("config").onclick = function () {
+            document.getElementById("over").style.display = 'flex';
+        }
+
+        document.getElementById("reset").onclick = function () {
+            result.innerHTML = "";
+            result.style.display = 'none';
+            sedex.focus();
+        }
+
+        function calculate() {
+            let subtotal = embalagem.value == '' ? 0 : stringToFloat(embalagem.value, separator);
+            if (ar.checked) {
+                subtotal += arValor;
+            }
+            if (mp.checked) {
+                subtotal += mpValor;
+            }
+
+            let taxaSeguroSedex = 0;
+            let taxaSeguroPac = 0;
+            let adValor = adValorem.value == '' ? 0 : stringToFloat(adValorem.value, separator);
+            if (adValor > seguroMaxSedex) {
+                adValorem.value = seguroMaxSedex;
+                adValor = seguroMaxSedex;
+            }
+
+            if (adValor > seguro) {
+                taxaSeguroSedex = (adValor - seguro) * (porcentagem / 100);
+                if (adValor > seguroMaxPac) {
+                    taxaSeguroPac = (seguroMaxPac - seguro) * (porcentagem / 100);
+                } else {
+                    taxaSeguroPac = (adValor - seguro) * (porcentagem / 100);
+                }
+            }
+
+            let $sed = sedex.value == '' ? 0 : stringToFloat(sedex.value, separator);
+            let $pac = pac.value == '' ? 0 : stringToFloat(pac.value, separator);
+
+            const s = floatToMoney(($sed + subtotal + taxaSeguroSedex), coin);
+            const p = floatToMoney(($pac + subtotal + taxaSeguroPac), coin);
+            let output = ""
+            if ($sed != 0) {
+                output += `<p class="yellow">Sedex:</p><p class="yellow center">${s}</p>`
+            }
+            if ($pac != 0 && pacLine == true) {
+                output += `<p>Pac:</p><p class="center">${p}</p>`
+            }
+            if ($sed != 0 || ($pac != 0 && pacLine == true)) {
+                result.innerHTML = output;
+                result.style.display = 'block';
+            }
+        }
+
+        function decimalFormat(obj, event) {
+            let previousValue = obj.value.substring(0, obj.value.length - 1);
+            let key = obj.value.substring(previousValue.length, obj.value.length);
+
+            if (key == '.' && separator == ',') {
+                key = ',';
+            } else if (key == ',' && separator == '.') {
+                key = '.';
+            }
+            obj.value = previousValue + key;  // correct separator
+
+            const regex = (separator == ',') ? /[0-9,]/g : /[0-9\.]/g;
+            const pv = (separator == ',') ? /,/g : /\./g;
+            if (regex.test(key) && (key != 'F2' && key != 'F4' && key != 'F5' && key != 'F8' && key != 'F9' && key != 'F11' && key != 'F12')) {
+                if (key == separator) {
+                    if (pv.test(previousValue)) {// if there was already a separator
+                        obj.value = previousValue;
+                    }
+                } else {
+                    const reg = (separator == ',') ? /,/g : /\./g;
+                    if (reg.test(obj.value)) { // if there is already a separator
+                        let dif = obj.value.length - obj.value.indexOf(separator);
+                        if (dif > 3) { // limiting the number of decimal places
+                            obj.value = previousValue;
+                        }
+                    }
+                    obj.value = stringToDecimal(obj.value, separator);
+                }
+            } else if (!(event.keyCode > 32 && event.keyCode < 41)) {
+                //33-pageup, 34-pagedown, 35-end, 36-home, 37 at 40 arrows
+                obj.value = previousValue;
+            }
+            if (event.keyCode == 8 || event.keyCode == 46) {
+                //Backspace or Delete                 
+                if (obj.value.length > 0) {
+                    obj.value = stringToDecimal(obj.value, separator);
+                }
+            } else if (event.keyCode == 13) {
+                //Enter                   
+                obj.nextElementSibling.nextElementSibling.focus();
+            }
+        }
+
+        function formatPrevious(object) {
+            if (object.value == ',') {
+                if (object == sedex || object == pac || object == embalagem || object == adValorem) {
+                    object.value = "";
+                } else {
+                    object.value = 0;
+                }
+            }
+            if (object.value.length > 0) {
+                object.value = floatToDecimal(stringToFloat(object.value, separator), separator);
+            }
+        }
+    </script>
+</body>
+
+</html>
