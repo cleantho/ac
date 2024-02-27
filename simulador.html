@@ -363,10 +363,22 @@
         const elementMaxSed = document.getElementById('seguroMaxSedex');
         const elementPorcentagem = document.getElementById('porcentagem');
 
+        function noSupport() {
+            setTimeout(() => {
+                alertNew("Este navegador não suporta armazenamento local! <br>A configuração padrão será utilizada.")
+            }, 500);
+            elementAr.disabled = true;
+            elementMp.disabled = true;
+            elementSeguro.disabled = true;
+            elementMaxPac.disabled = true;
+            elementMaxSed.disabled = true;
+            elementPorcentagem.disabled = true;
+        }
+
         let acess = false;
-        document.hasStorageAccess().then(permission => {
-            if (typeof (Storage) !== "undefined" && permission) { // Check browser support
-                acess = true;
+        if (typeof (Storage) !== "undefined") { // Check browser support    
+            acess = true;
+            try {
                 if (localStorage.seguro) { // second access onwards
                     arValor = Number(localStorage.arValor);
                     mpValor = Number(localStorage.mpValor);
@@ -385,24 +397,19 @@
                         alertNew("Verifique se os valores de configuação estão corretos!", 6000)
                     }, 500);
                 }
-            } else { // browser no support
-                setTimeout(() => {
-                    alertNew("Este navegador não suporta armazenamento local! <br>A configuração padrão será utilizada.")
-                }, 500);
-                elementAr.disabled = true;
-                elementMp.disabled = true;
-                elementSeguro.disabled = true;
-                elementMaxPac.disabled = true;
-                elementMaxSed.disabled = true;
-                elementPorcentagem.disabled = true;
+            } catch (error) { // without permission
+                acess = false;
+                noSupport();
             }
-            elementAr.value = floatToDecimal(arValor, separator);
-            elementMp.value = floatToDecimal(mpValor, separator);
-            elementSeguro.value = floatToDecimal(seguro, separator);
-            elementMaxPac.value = floatToDecimal(seguroMaxPac, separator);
-            elementMaxSed.value = floatToDecimal(seguroMaxSedex, separator);
-            elementPorcentagem.value = floatToDecimal(porcentagem, separator);
-        });
+        } else { // browser no support            
+            noSupport();
+        }
+        elementAr.value = floatToDecimal(arValor, separator);
+        elementMp.value = floatToDecimal(mpValor, separator);
+        elementSeguro.value = floatToDecimal(seguro, separator);
+        elementMaxPac.value = floatToDecimal(seguroMaxPac, separator);
+        elementMaxSed.value = floatToDecimal(seguroMaxSedex, separator);
+        elementPorcentagem.value = floatToDecimal(porcentagem, separator);
 
         function setup() {
             if (acess) {
