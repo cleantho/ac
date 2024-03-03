@@ -1,51 +1,66 @@
-body{
+body {
     background-color: rgba(255, 255, 255, 0.9);
     color: rgb(53, 90, 36);
-    
+
 }
-h1{
+
+h1 {
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20pt;
     margin-bottom: 4px;
 }
-form#campo{
+
+form#campo {
     margin: auto;
     width: 306px;
     padding: 12px;
-    border: double 2px black ;
+    border: double 2px black;
     background-color: rgba(236, 229, 229, 0.9);
-    box-shadow: 2px 2px 5px rgba(0 , 0, 0, .4);
-}         
-legend{
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .4);
+}
+
+legend {
     font-size: 16pt;
 }
-select{
+
+select {
     width: 75px;
 }
-p#bot{
+
+p#bot {
     text-align: center;
     margin: 10px;
 }
-p#data{
+
+p#data {
     font-size: 7pt;
-    text-align: right;    
+    text-align: right;
     margin: 0px;
 }
-img#logo{            
+
+img#logo {
     width: 50%;
     height: 50%;
     margin-top: 10px;
     margin-bottom: 0px;
 }
-div#resultado{
+
+div#resultado {
     opacity: 0;
     margin: auto;
     width: 330px;
-    border: double 2px black ;            
+    border: double 2px black;
     background-color: rgba(236, 229, 229, 0.9);
-    box-shadow: 2px 2px 5px rgba(0 , 0, 0, .4);
-    text-align: center;	
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .4);
+    text-align: center;
     font-size: 40pt;
     color: red;
-}        
+}
+
+svg.logo {
+    position: relative;
+    left: 10px;
+    width: 90px;
+    height: 30px;
+}
