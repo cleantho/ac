@@ -15,7 +15,10 @@
             --my-blue: #0078A5;
             --my-yellow: #fdb603;
             --my-navy: #033F68;
+            --low-yellow: #f9de99;
+            --low-blue: rgb(212, 212, 251);
             --my-gray: rgba(236, 229, 229, 0.9);
+            --hard-gray: rgba(107, 103, 103, 0.9);
             --tinted: rgba(0, 0, 0, .7);
             --shadow: rgba(0, 0, 0, .4);
         }
@@ -53,7 +56,7 @@
         }
 
         section {
-            margin: calc(15px + var(--height-header)) 0px calc(10px + var(--height-footer));
+            margin: calc(50px + var(--height-header)) 0px calc(10px + var(--height-footer));
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -63,17 +66,28 @@
             top: calc(100% - var(--height-footer));
             height: var(--height-footer);
             font-size: calc(var(--height-footer) - 6px);
+            z-index: 10;
         }
 
         .square {
             width: 480px;
             max-width: 480px;
             min-width: 220px;
-            min-height: 320px;
+            min-height: 405px;
             margin: 5px;
             background-color: var(--my-gray);
-            border: double 2px black;
-            box-shadow: 2px 2px 5px var(--shadow);
+            border: 2px solid var(--hard-gray);
+            border-bottom: 12px solid var(--hard-gray);
+        }
+
+        #result {
+            display: none;
+            width: 480px;
+            max-width: 480px;
+            min-width: 220px;
+            min-height: 405px;
+            margin: 5px;
+            align-items: center;
         }
 
         .title {
@@ -88,7 +102,7 @@
             width: 100%;
             height: 100%;
             z-index: 10;
-            padding: calc(15px + var(--height-header)) 0px calc(10px + var(--height-footer));
+            padding: calc(50px + var(--height-header)) 0px calc(10px + var(--height-footer));
             background-color: var(--tinted);
             position: absolute;
             top: 0;
@@ -125,12 +139,13 @@
         .grid {
             padding: 20px;
             display: grid;
+            height: 100%;
             grid-template-columns: auto auto auto;
-            row-gap: 10px;
+            row-gap: 16px;
             column-gap: 2px;
         }
 
-        .itemlabel {
+        .item-label {
             grid-column-start: 2;
             grid-column-end: 3;
         }
@@ -152,26 +167,7 @@
             text-align: left;
         }
 
-        #result {
-            padding: 20px;
-            display: none;
-            font-size: 60px;
-            color: var(--my-blue);
-        }
-
-        #result p {
-            margin: 2px;
-        }
-
-        .center {
-            text-align: center;
-        }
-
-        .yellow {
-            color: var(--my-yellow);
-        }
-
-        div[alert] {
+        div[alert], div[warning] {
             width: 280px;
             padding: 10px;
             position: absolute;
@@ -188,14 +184,171 @@
             text-align: center;
         }
 
+        .tag {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background-color: var(--my-yellow);
+            border: 2px solid var(--my-yellow);
+            font-family: sans-serif;
+            font-size: 51px;
+            color: var(--my-navy);
+            overflow: hidden;
+        }
+
+        .pac {
+            background-color: var(--my-blue);
+            border: 2px solid var(--my-blue);
+            color: var(--my-blue);
+        }
+
+        .mark {
+            font-size: 16px;
+            font-weight: bolder;
+            fill: var(--my-navy);
+        }
+
+        .type {
+            width: 120px;
+            position: absolute;
+            top: 13px;
+            right: 20px;
+            line-height: 50px;
+            padding: 0px 5px 1px;
+            background-color: var(--my-navy);
+            color: var(--my-yellow);
+            font-size: 30px;
+            font-weight: 900;
+            text-align: center;
+            transform: skewX(-12deg);
+            z-index: 1;
+        }
+
+        .m-white {
+            fill: white;
+            background-color: var(--my-blue);
+            color: white;
+        }
+
+        .border {
+            width: 27%;
+            height: 40px;
+            position: absolute;
+            top: 36px;
+            left: 4px;
+            z-index: 1;
+            display: flex;
+            flex-wrap: nowrap;
+            font-weight: bold;
+            font-size: medium;
+            border-radius: 6px;
+        }
+
+        .border1 {
+            margin-left: 10px;
+            justify-content: left;
+        }
+
+        .border2 {
+            left: 148px;
+            font-size: x-large;
+            line-height: 40px;
+            justify-content: end;
+            vertical-align: middle;
+        }
+
+        .strew {
+            background-color: var(--low-yellow);
+            transform: skewX(-30deg);
+        }
+
+        .low-sedex {
+            background-color: var(--low-yellow);
+        }
+
+        .low-pac {
+            background-color: var(--low-blue);
+        }
+
+        svg.logo {
+            position: absolute;
+            left: 10px;
+            width: 90px;
+            height: 30px;
+        }
+
+        .big {
+            position: absolute;
+            width: 44%;
+            height: 74px;
+            top: 2px;
+            right: -25px;
+            background-color: white;
+            transform: skewX(-30deg);
+            border-radius: 6px;
+        }
+
+        .bar {
+            width: 100%;
+            height: 48%;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            color: black;
+            position: absolute;
+            bottom: 11px;
+        }
+
+        .bar1 {
+            width: 60%;
+            height: 22px;
+            position: absolute;
+            top: 80px;
+            right: 50%;
+            background-color: white;
+            transform: skewX(30deg);
+            border-radius: 6px;
+            z-index: 1;
+        }
+
+        .bar-s {
+            background-color: var(--my-yellow);
+            left: 50%;
+        }
+
+        .bar-p {
+            background-color: var(--my-blue);
+            left: 50%;
+        }
+
         @media screen and (max-width: 490px) {
             #result {
-                font-size: 12vw;
+                width: 100%;
             }
 
             label,
             input {
                 font-size: 4.5vw;
+            }
+
+            .type {
+                width: 22vw;
+                font-size: 5.2vw;
+                right: 4vw;
+            }
+
+            .border {                
+                font-size: 3.2vw;
+            }
+
+            .border2 {
+                font-size: 4vw;
+                left: 28vw;
+            }
+
+            .bar {
+                font-size: 10vw;
             }
         }
     </style>
@@ -210,16 +363,16 @@
         <form class="square grid">
             <input type="button" id="folder" value="-"
                 title="Click no sinal '-' para esconder ou em '+' para mostrar a opção Pac.">
-            <label for="sedex" class="itemlabel" title="Serviço de Encomenda Expressa Nacional">Sedex:</label>
+            <label for="sedex" class="item-label" title="Serviço de Encomenda Expressa Nacional">Sedex:</label>
             <input type="text" id="sedex" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
                 maxlength="9" inputmode="decimal" onchange="formatPrevious(this)" autofocus>
-            <label for="pac" id="labelpac" class="itemlabel" title="Pac - Prático, Acessível e Confiável">Pac:</label>
+            <label for="pac" id="labelpac" class="item-label" title="Pac - Prático, Acessível e Confiável">Pac:</label>
             <input type="text" id="pac" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
                 maxlength="9" inputmode="decimal" onchange="formatPrevious(this)">
-            <label for="emb" class="itemlabel">Embalagem:</label>
+            <label for="emb" class="item-label">Embalagem:</label>
             <input type="text" id="emb" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
                 maxlength="6" inputmode="decimal" onchange="formatPrevious(this)">
-            <label for="valor" class="itemlabel" title="Valor da Mercadoria">Ad Valorem:</label>
+            <label for="valor" class="item-label" title="Valor da Mercadoria">Ad Valorem:</label>
             <input type="text" id="valor" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
                 maxlength="9" inputmode="decimal" onchange="calculate(); formatPrevious(this);">
             <div class="item left">
@@ -236,7 +389,51 @@
                 <input type="button" value=" Calcular " title="Cálculo dos valores acima" onclick="calculate()">
             </div>
         </form>
-        <div id="result" class="square">
+        <div id="result">
+            <div id="tagSedex" class="tag">
+                <svg class="logo">
+                    <polygon class="mark" points="8,8 14,8 18,12 14,16 8,16 12,12" />
+                    <polygon class="mark" points="0,16 4,12 10,12 6,16 10,20 4,20" />
+                    <text class="mark" x="22" y="20">Correios</text>
+                </svg>
+                <div class="big"></div>
+                <div class="type">SEDEX</div>
+                <div class="border low-sedex"></div>
+                <div class="border border1 strew"></div>
+                <div class="border border1">
+                    <div>Peso</div>
+                    <p id="taxSedex"></p>
+                </div>
+                <div class="border border2 strew"></div>
+                <div class="border border2">
+                    <div armp>&#9746;AR &#9744;MP</div>
+                </div>
+                <div class="bar1"></div>
+                <div class="bar1 bar-s"></div>
+                <div id="sedexResult" class="bar"></div>
+            </div>
+            <div id="tagPac" class="tag pac">
+                <svg class="logo">
+                    <polygon class="mark m-white" points="8,8 14,8 18,12 14,16 8,16 12,12" />
+                    <polygon class="mark m-white" points="0,16 4,12 10,12 6,16 10,20 4,20" />
+                    <text class="mark m-white" x="22" y="20">Correios</text>
+                </svg>
+                <div class="big"></div>
+                <div class="type m-white">PAC</div>
+                <div class="border low-pac"></div>
+                <div class="border border1 strew low-pac"></div>
+                <div class="border border1">
+                    <div>Peso</div>
+                    <p id="taxPac"></p>
+                </div>
+                <div class="border border2 strew low-pac"></div>
+                <div class="border border2">
+                    <div armp>&#9746;AR &#9744;MP</div>
+                </div>
+                <div class="bar1"></div>
+                <div class="bar1 bar-p"></div>
+                <div id="pacResult" class="bar"></div>
+            </div>
         </div>
     </section>
 
@@ -244,30 +441,32 @@
         <div alert>
         </div>
         <div id="over">
+            <div warning>
+            </div>
             <div class="square">
                 <div class="title">
                     <strong>&#9881; Configuração</strong>
                     <button onclick="closeSetup()">x</button>
                 </div>
                 <form class="grid">
-                    <label for="arValor" class="itemlabel">Taxa AR:</label>
+                    <label for="arValor" class="item-label">Taxa AR:</label>
                     <input type="text" id="arValor" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
                         maxlength="9" inputmode="decimal" onchange="formatPrevious(this); setup();">
-                    <label for="mpValor" class="itemlabel">Taxa MP:</label>
+                    <label for="mpValor" class="item-label">Taxa MP:</label>
                     <input type="text" id="mpValor" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
                         maxlength="9" inputmode="decimal" onchange="formatPrevious(this); setup();">
-                    <label for="seguro" class="itemlabel">Seguro Padrão:</label>
+                    <label for="seguro" class="item-label">Seguro Padrão:</label>
                     <input type="text" id="seguro" class="item" autocomplete="off" onkeyup="decimalFormat(this, event)"
                         maxlength="9" inputmode="decimal" onchange="formatPrevious(this); setup();">
-                    <label for="seguroMaxPac" class="itemlabel">Seguro Máx. Pac:</label>
+                    <label for="seguroMaxPac" class="item-label">Seguro Máx. Pac:</label>
                     <input type="text" id="seguroMaxPac" class="item" autocomplete="off"
                         onkeyup="decimalFormat(this, event)" maxlength="9" inputmode="decimal"
                         onchange="formatPrevious(this); setup();">
-                    <label for="seguroMaxSedex" class="itemlabel">Seguro Máx. Sedex:</label>
+                    <label for="seguroMaxSedex" class="item-label">Seguro Máx. Sedex:</label>
                     <input type="text" id="seguroMaxSedex" class="item" autocomplete="off"
                         onkeyup="decimalFormat(this, event)" maxlength="9" inputmode="decimal"
                         onchange="formatPrevious(this); setup();">
-                    <label for="porcentagem" class="itemlabel">Porcentagem do Seguro:</label>
+                    <label for="porcentagem" class="item-label">Porcentagem do Seguro:</label>
                     <input type="text" id="porcentagem" class="item" autocomplete="off"
                         onkeyup="decimalFormat(this, event)" maxlength="9" inputmode="decimal"
                         onchange="formatPrevious(this); setup();">
@@ -304,32 +503,63 @@
         }
     </script>
 
+    <script> // warning window          
+        const warning = document.querySelector('[warning]');
+
+        function closeWarning() {
+            warning.style.display = 'none';
+            document.getElementById("arValor").focus();
+        }
+
+        const warningNew = (msn) => {
+            let html = `
+        <strong>Mensagem de Alerta:</strong>
+        <p>${msn}</p>
+        <button onclick="closeWarning()">Ok</button>`;
+            warning.innerHTML = html;
+            warning.style.display = 'block';
+        }
+    </script>
+
     <script> // type conversion        
         function stringToDecimal(value, separator) {
             let reg = (separator == ',') ? /,/g : /\./g;
             if (reg.test(value)) { // se já existir separador
-                let dif = value.length - value.indexOf(separator) - 1
+                let dif = value.length - value.indexOf(separator) - 1;
                 if (separator == ',') {
-                    return Number.parseFloat(value.replaceAll('.', '').replace(',', '.')).toLocaleString("pt-BR", { style: "decimal", currency: "BRL", minimumFractionDigits: dif })
+                    value = Number.parseFloat(value.replaceAll('.', '').replace(',', '.')).toLocaleString("pt-BR", { style: "decimal", currency: "BRL", minimumFractionDigits: dif });
+                } else {
+                    value = Number.parseFloat(value.replaceAll(',', '')).toLocaleString("en-US", { style: "decimal", currency: "USA", minimumFractionDigits: dif });
                 }
-                return Number.parseFloat(value.replaceAll(',', '')).toLocaleString("en-US", { style: "decimal", currency: "USA", minimumFractionDigits: dif })
             } else {
                 if (separator == ',') {
-                    return Number.parseFloat(value.replaceAll('.', '').replace(',', '.')).toLocaleString("pt-BR", { style: "decimal", currency: "BRL", maximumFractionDigits: 2 })
+                    value = Number.parseFloat(value.replaceAll('.', '').replace(',', '.')).toLocaleString("pt-BR", { style: "decimal", currency: "BRL", maximumFractionDigits: 2 });
+                } else {
+                    value = Number.parseFloat(value.replaceAll(',', '')).toLocaleString("en-US", { style: "decimal", currency: "USA", maximumFractionDigits: 2 });
                 }
-                return Number.parseFloat(value.replaceAll(',', '')).toLocaleString("en-US", { style: "decimal", currency: "USA", maximumFractionDigits: 2 })
             }
+            if (value == 'NaN') {
+                value = '';
+            }
+            return value;
         }
 
         function stringToFloat(value, separator) {
             if (separator == ',') {
-                return Number.parseFloat(value.replaceAll('.', '').replace(',', '.'));
+                value = Number.parseFloat(value.replaceAll('.', '').replace(',', '.'));
             } else {
-                return Number.parseFloat(value.replaceAll(',', ''));
+                value = Number.parseFloat(value.replaceAll(',', ''));
             }
+            if (!value) {
+                value = 0;
+            }
+            return value;
         }
 
         function floatToDecimal(value, separator, minDigit = 2) {
+            if (!value) {
+                value = '';
+            }
             if (separator == ',') {
                 return value.toLocaleString("pt-BR", { style: "decimal", currency: "BRL", minimumFractionDigits: minDigit });
             } else {
@@ -338,6 +568,9 @@
         }
 
         function floatToMoney(value, coin) {
+            if (!value) {
+                value = 0;
+            }
             if (coin == 'br') {
                 return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 2 });
             } else {
@@ -394,7 +627,7 @@
                     localStorage.seguroMaxSedex = seguroMaxSedex;
                     localStorage.porcentagem = porcentagem;
                     setTimeout(() => {
-                        alertNew("Verifique se os valores de configuação estão corretos!", 6000)
+                        alertNew("Verifique se os valores de configuação estão corretos!", 6000);
                     }, 500);
                 }
             } catch (error) { // without permission
@@ -419,6 +652,16 @@
                 seguroMaxPac = stringToFloat(elementMaxPac.value, separator);
                 seguroMaxSedex = stringToFloat(elementMaxSed.value, separator);
                 porcentagem = stringToFloat(elementPorcentagem.value, separator);
+                if (seguroMaxPac < seguro) {
+                    warningNew("Seguro Máximo do Pac não pode ser menor que o Seguro Padrão!");
+                    seguroMaxPac = seguro;
+                    elementMaxPac.value = floatToDecimal(seguro, separator);
+                }
+                if (seguroMaxSedex < seguro) {
+                    warningNew("Seguro Máximo do Sedex não pode ser menor que o Seguro Padrão!");
+                    seguroMaxSedex = seguro;
+                    elementMaxSed.value = floatToDecimal(seguro, separator);
+                }
                 localStorage.arValor = arValor;
                 localStorage.mpValor = mpValor;
                 localStorage.seguro = seguro;
@@ -436,7 +679,7 @@
 
     <script> // Main window    
         let pacLine = true;
-        const folder = document.getElementById("folder")
+        const folder = document.getElementById("folder");
         folder.onclick = function () {
             const labelPac = document.getElementById('labelpac');
             const statusLabel = labelPac.style.display;
@@ -459,7 +702,14 @@
         const adValorem = document.getElementById("valor");
         const ar = document.getElementById("ar");
         const mp = document.getElementById("mp");
-        const result = document.getElementById("result");
+
+        const result = document.getElementById('result');
+        const tagSedex = document.getElementById('tagSedex');
+        const tagPac = document.getElementById('tagPac');
+        const sedexResult = document.getElementById('sedexResult');
+        const pacResult = document.getElementById('pacResult');
+        const taxSedex = document.getElementById('taxSedex');
+        const taxPac = document.getElementById('taxPac');
 
         adValorem.title = `Valor máximo permitido de ${floatToMoney(seguroMaxSedex, coin)}.\nSendo ${floatToMoney(seguroMaxSedex, coin)} para Sedex e ${floatToMoney(seguroMaxPac, coin)} para Pac. `;
 
@@ -468,8 +718,12 @@
         }
 
         document.getElementById("reset").onclick = function () {
-            result.innerHTML = "";
+            document.querySelectorAll('[armp]').forEach(div => {
+                div.innerHTML = `&#9746;AR &#9744;MP`;
+            });
             result.style.display = 'none';
+            tagSedex.style.display = 'none';
+            tagPac.style.display = 'none';
             sedex.focus();
         }
 
@@ -504,17 +758,36 @@
 
             const s = floatToMoney(($sed + subtotal + taxaSeguroSedex), coin);
             const p = floatToMoney(($pac + subtotal + taxaSeguroPac), coin);
-            let output = ""
             if ($sed != 0) {
-                output += `<p class="yellow">Sedex:</p><p class="yellow center">${s}</p>`
+                sedexResult.innerText = s;
+                taxSedex.innerHTML = floatToDecimal(taxaSeguroSedex, separator);
+                tagSedex.style.display = 'block';
+                tagPac.style.marginTop = '5px';
+            } else {
+                tagSedex.style.display = 'none';
+                tagPac.style.marginTop = '0px';
             }
+
             if ($pac != 0 && pacLine == true) {
-                output += `<p>Pac:</p><p class="center">${p}</p>`
+                pacResult.innerText = p;
+                taxPac.innerHTML = floatToDecimal(taxaSeguroPac, separator);
+                tagPac.style.display = 'block';
+            } else {
+                tagPac.style.display = 'none';
             }
-            if ($sed != 0 || ($pac != 0 && pacLine == true)) {
-                result.innerHTML = output;
+            const widthTop = document.getElementsByClassName('basic')[0].clientWidth;
+
+            if ($sed != 0 && ($pac != 0 && pacLine == true)) {
+                result.style.display = 'block';
+            } else if (($sed != 0 || ($pac != 0 && pacLine == true)) && widthTop > 980) {
+                result.style.display = 'flex';
+            } else {
                 result.style.display = 'block';
             }
+
+            document.querySelectorAll('[armp]').forEach(div => {
+                div.innerHTML = `${ar.checked ? '&#9746;' : '&#9744;'}AR ${mp.checked ? '&#9746;' : '&#9744;'}MP`;
+            });
         }
 
         function decimalFormat(obj, event) {
@@ -558,19 +831,17 @@
                 //Enter                   
                 obj.nextElementSibling.nextElementSibling.focus();
             }
+
         }
 
         function formatPrevious(object) {
             if (object.value == ',') {
-                if (object == sedex || object == pac || object == embalagem || object == adValorem) {
-                    object.value = "";
-                } else {
-                    object.value = 0;
-                }
+                object.value = 0;
             }
             if (object.value.length > 0) {
                 object.value = floatToDecimal(stringToFloat(object.value, separator), separator);
             }
+
         }
     </script>
 </body>
