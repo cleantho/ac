@@ -167,7 +167,8 @@
             text-align: left;
         }
 
-        div[alert], div[warning] {
+        div[alert],
+        div[warning] {
             width: 280px;
             padding: 10px;
             position: absolute;
@@ -338,7 +339,7 @@
                 right: 4vw;
             }
 
-            .border {                
+            .border {
                 font-size: 3.2vw;
             }
 
@@ -482,57 +483,50 @@
         <p>Desenvolvido por Cleantho</p>
     </footer>
 
-    <script> // Alert window          
-        const alert = document.querySelector('[alert]');
+    <script> // Alert window  
+        let open = {}
 
-        function closeAlert() {
+        function closeAlert(screen, elementFocus, manual = true) {
+            const alert = document.querySelector(`[${screen}]`);
             alert.style.display = 'none';
-            document.getElementById("sedex").focus();
+            if (manual) {
+                document.getElementById(`${elementFocus}`).focus();
+                document.getElementById(`${elementFocus}`).select();
+                open[elementFocus] = false
+            }
         }
 
-        const alertNew = (msn, time = 10000) => {
+        const alertNew = (screen, elementFocus, msn, time = 10000) => {
+            open[elementFocus] = true
+            const alert = document.querySelector(`[${screen}]`);
             let html = `
-            <strong>Mensagem de Alerta:</strong>
-            <p>${msn}</p>
-            <button onclick="closeAlert()">Ok</button>`;
+                <strong>Mensagem de Alerta:</strong>
+                <p>${msn}</p>
+                <button onclick="closeAlert('${screen}', '${elementFocus}')">Ok</button>`;
             alert.innerHTML = html;
             alert.style.display = 'block';
             setTimeout(() => {
-                closeAlert();
+                if (open[elementFocus])
+                    closeAlert(screen, elementFocus, false);
             }, time);
         }
     </script>
 
-    <script> // warning window          
-        const warning = document.querySelector('[warning]');
+    <script> // type conversion     
+        const country = 'br';
+        let separator = ',';
 
-        function closeWarning() {
-            warning.style.display = 'none';
-            document.getElementById("arValor").focus();
-        }
-
-        const warningNew = (msn) => {
-            let html = `
-        <strong>Mensagem de Alerta:</strong>
-        <p>${msn}</p>
-        <button onclick="closeWarning()">Ok</button>`;
-            warning.innerHTML = html;
-            warning.style.display = 'block';
-        }
-    </script>
-
-    <script> // type conversion        
-        function stringToDecimal(value, separator) {
-            let reg = (separator == ',') ? /,/g : /\./g;
+        function stringToDecimal(value) {
+            let reg = (country == 'br') ? /,/g : /\./g;
             if (reg.test(value)) { // se já existir separador
                 let dif = value.length - value.indexOf(separator) - 1;
-                if (separator == ',') {
+                if (country == 'br') {
                     value = Number.parseFloat(value.replaceAll('.', '').replace(',', '.')).toLocaleString("pt-BR", { style: "decimal", currency: "BRL", minimumFractionDigits: dif });
                 } else {
                     value = Number.parseFloat(value.replaceAll(',', '')).toLocaleString("en-US", { style: "decimal", currency: "USA", minimumFractionDigits: dif });
                 }
             } else {
-                if (separator == ',') {
+                if (country == 'br') {
                     value = Number.parseFloat(value.replaceAll('.', '').replace(',', '.')).toLocaleString("pt-BR", { style: "decimal", currency: "BRL", maximumFractionDigits: 2 });
                 } else {
                     value = Number.parseFloat(value.replaceAll(',', '')).toLocaleString("en-US", { style: "decimal", currency: "USA", maximumFractionDigits: 2 });
@@ -544,8 +538,8 @@
             return value;
         }
 
-        function stringToFloat(value, separator) {
-            if (separator == ',') {
+        function stringToFloat(value) {
+            if (country == 'br') {
                 value = Number.parseFloat(value.replaceAll('.', '').replace(',', '.'));
             } else {
                 value = Number.parseFloat(value.replaceAll(',', ''));
@@ -556,22 +550,22 @@
             return value;
         }
 
-        function floatToDecimal(value, separator, minDigit = 2) {
+        function floatToDecimal(value, minDigit = 2) {
             if (!value) {
                 value = '';
             }
-            if (separator == ',') {
+            if (country == 'br') {
                 return value.toLocaleString("pt-BR", { style: "decimal", currency: "BRL", minimumFractionDigits: minDigit });
             } else {
                 return value.toLocaleString("en-US", { style: "decimal", currency: "USA", minimumFractionDigits: minDigit });
             }
         }
 
-        function floatToMoney(value, coin) {
+        function floatToMoney(value) {
             if (!value) {
                 value = 0;
             }
-            if (coin == 'br') {
+            if (country == 'br') {
                 return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 2 });
             } else {
                 return value.toLocaleString("en-US", { style: "currency", currency: "USA", minimumFractionDigits: 2 });
@@ -580,14 +574,12 @@
     </script>
 
     <script> // Configuration window        
-        let arValor = 7.4;
-        let mpValor = 8.75;
-        let seguro = 24.5;
-        let seguroMaxPac = 4000.0;
-        let seguroMaxSedex = 34000.0;
+        let arValor = 7.75;
+        let mpValor = 9.15;
+        let seguro = 25.63;
+        let seguroMaxPac = 4184.84;
+        let seguroMaxSedex = 35571.17;
         let porcentagem = 2.0;
-        const separator = ',';
-        const coin = 'br';
 
         const elementAr = document.getElementById('arValor');
         const elementMp = document.getElementById('mpValor');
@@ -598,7 +590,7 @@
 
         function noSupport() {
             setTimeout(() => {
-                alertNew("Este navegador não suporta armazenamento local! <br>A configuração padrão será utilizada.")
+                alertNew("alert", "sedex", "Este navegador não suporta armazenamento local! <br>A configuração padrão será utilizada.")
             }, 500);
             elementAr.disabled = true;
             elementMp.disabled = true;
@@ -627,7 +619,7 @@
                     localStorage.seguroMaxSedex = seguroMaxSedex;
                     localStorage.porcentagem = porcentagem;
                     setTimeout(() => {
-                        alertNew("Verifique se os valores de configuação estão corretos!", 6000);
+                        alertNew("alert", "sedex", "Verifique se os valores de configuação estão corretos!", 6000);
                     }, 500);
                 }
             } catch (error) { // without permission
@@ -637,30 +629,30 @@
         } else { // browser no support            
             noSupport();
         }
-        elementAr.value = floatToDecimal(arValor, separator);
-        elementMp.value = floatToDecimal(mpValor, separator);
-        elementSeguro.value = floatToDecimal(seguro, separator);
-        elementMaxPac.value = floatToDecimal(seguroMaxPac, separator);
-        elementMaxSed.value = floatToDecimal(seguroMaxSedex, separator);
-        elementPorcentagem.value = floatToDecimal(porcentagem, separator);
+        elementAr.value = floatToDecimal(arValor);
+        elementMp.value = floatToDecimal(mpValor);
+        elementSeguro.value = floatToDecimal(seguro);
+        elementMaxPac.value = floatToDecimal(seguroMaxPac);
+        elementMaxSed.value = floatToDecimal(seguroMaxSedex);
+        elementPorcentagem.value = floatToDecimal(porcentagem);
 
         function setup() {
             if (acess) {
-                arValor = stringToFloat(elementAr.value, separator);
-                mpValor = stringToFloat(elementMp.value, separator);
-                seguro = stringToFloat(elementSeguro.value, separator);
-                seguroMaxPac = stringToFloat(elementMaxPac.value, separator);
-                seguroMaxSedex = stringToFloat(elementMaxSed.value, separator);
-                porcentagem = stringToFloat(elementPorcentagem.value, separator);
+                arValor = stringToFloat(elementAr.value);
+                mpValor = stringToFloat(elementMp.value);
+                seguro = stringToFloat(elementSeguro.value);
+                seguroMaxPac = stringToFloat(elementMaxPac.value);
+                seguroMaxSedex = stringToFloat(elementMaxSed.value);
+                porcentagem = stringToFloat(elementPorcentagem.value);
                 if (seguroMaxPac < seguro) {
-                    warningNew("Seguro Máximo do Pac não pode ser menor que o Seguro Padrão!");
+                    alertNew("warning", "seguroMaxPac", "Seguro Máximo do Pac não pode ser menor que o Seguro Padrão!");
                     seguroMaxPac = seguro;
-                    elementMaxPac.value = floatToDecimal(seguro, separator);
+                    elementMaxPac.value = floatToDecimal(seguro);
                 }
                 if (seguroMaxSedex < seguro) {
-                    warningNew("Seguro Máximo do Sedex não pode ser menor que o Seguro Padrão!");
+                    alertNew("warning", "seguroMaxSedex", "Seguro Máximo do Sedex não pode ser menor que o Seguro Padrão!");
                     seguroMaxSedex = seguro;
-                    elementMaxSed.value = floatToDecimal(seguro, separator);
+                    elementMaxSed.value = floatToDecimal(seguro);
                 }
                 localStorage.arValor = arValor;
                 localStorage.mpValor = mpValor;
@@ -680,6 +672,7 @@
     <script> // Main window    
         let pacLine = true;
         const folder = document.getElementById("folder");
+
         folder.onclick = function () {
             const labelPac = document.getElementById('labelpac');
             const statusLabel = labelPac.style.display;
@@ -711,7 +704,7 @@
         const taxSedex = document.getElementById('taxSedex');
         const taxPac = document.getElementById('taxPac');
 
-        adValorem.title = `Valor máximo permitido de ${floatToMoney(seguroMaxSedex, coin)}.\nSendo ${floatToMoney(seguroMaxSedex, coin)} para Sedex e ${floatToMoney(seguroMaxPac, coin)} para Pac. `;
+        adValorem.title = `Valor máximo permitido de ${floatToMoney(seguroMaxSedex)}.\nSendo ${floatToMoney(seguroMaxSedex)} para Sedex e ${floatToMoney(seguroMaxPac)} para Pac. `;
 
         document.getElementById("config").onclick = function () {
             document.getElementById("over").style.display = 'flex';
@@ -728,7 +721,7 @@
         }
 
         function calculate() {
-            let subtotal = embalagem.value == '' ? 0 : stringToFloat(embalagem.value, separator);
+            let subtotal = embalagem.value == '' ? 0 : stringToFloat(embalagem.value);
             if (ar.checked) {
                 subtotal += arValor;
             }
@@ -738,9 +731,9 @@
 
             let taxaSeguroSedex = 0;
             let taxaSeguroPac = 0;
-            let adValor = adValorem.value == '' ? 0 : stringToFloat(adValorem.value, separator);
+            let adValor = adValorem.value == '' ? 0 : stringToFloat(adValorem.value);
             if (adValor > seguroMaxSedex) {
-                adValorem.value = seguroMaxSedex;
+                adValorem.value = floatToDecimal(seguroMaxSedex);
                 adValor = seguroMaxSedex;
             }
 
@@ -753,14 +746,14 @@
                 }
             }
 
-            let $sed = sedex.value == '' ? 0 : stringToFloat(sedex.value, separator);
-            let $pac = pac.value == '' ? 0 : stringToFloat(pac.value, separator);
+            let $sed = sedex.value == '' ? 0 : stringToFloat(sedex.value);
+            let $pac = pac.value == '' ? 0 : stringToFloat(pac.value);
 
-            const s = floatToMoney(($sed + subtotal + taxaSeguroSedex), coin);
-            const p = floatToMoney(($pac + subtotal + taxaSeguroPac), coin);
+            const s = floatToMoney($sed + subtotal + taxaSeguroSedex);
+            const p = floatToMoney($pac + subtotal + taxaSeguroPac);
             if ($sed != 0) {
                 sedexResult.innerText = s;
-                taxSedex.innerHTML = floatToDecimal(taxaSeguroSedex, separator);
+                taxSedex.innerHTML = floatToDecimal(taxaSeguroSedex);
                 tagSedex.style.display = 'block';
                 tagPac.style.marginTop = '5px';
             } else {
@@ -770,7 +763,7 @@
 
             if ($pac != 0 && pacLine == true) {
                 pacResult.innerText = p;
-                taxPac.innerHTML = floatToDecimal(taxaSeguroPac, separator);
+                taxPac.innerHTML = floatToDecimal(taxaSeguroPac);
                 tagPac.style.display = 'block';
             } else {
                 tagPac.style.display = 'none';
@@ -801,22 +794,22 @@
             }
             obj.value = previousValue + key;  // correct separator
 
-            const regex = (separator == ',') ? /[0-9,]/g : /[0-9\.]/g;
-            const pv = (separator == ',') ? /,/g : /\./g;
+            const regex = (country == 'br') ? /[0-9,]/g : /[0-9\.]/g;
+            const pv = (country == 'br') ? /,/g : /\./g;
             if (regex.test(key) && (key != 'F2' && key != 'F4' && key != 'F5' && key != 'F8' && key != 'F9' && key != 'F11' && key != 'F12')) {
                 if (key == separator) {
                     if (pv.test(previousValue)) {// if there was already a separator
                         obj.value = previousValue;
                     }
                 } else {
-                    const reg = (separator == ',') ? /,/g : /\./g;
+                    const reg = (country == 'br') ? /,/g : /\./g;
                     if (reg.test(obj.value)) { // if there is already a separator
                         let dif = obj.value.length - obj.value.indexOf(separator);
                         if (dif > 3) { // limiting the number of decimal places
                             obj.value = previousValue;
                         }
                     }
-                    obj.value = stringToDecimal(obj.value, separator);
+                    obj.value = stringToDecimal(obj.value);
                 }
             } else if (!(event.keyCode > 32 && event.keyCode < 41)) {
                 //33-pageup, 34-pagedown, 35-end, 36-home, 37 at 40 arrows
@@ -825,7 +818,7 @@
             if (event.keyCode == 8 || event.keyCode == 46) {
                 //Backspace or Delete                 
                 if (obj.value.length > 0) {
-                    obj.value = stringToDecimal(obj.value, separator);
+                    obj.value = stringToDecimal(obj.value);
                 }
             } else if (event.keyCode == 13) {
                 //Enter                   
@@ -839,9 +832,8 @@
                 object.value = 0;
             }
             if (object.value.length > 0) {
-                object.value = floatToDecimal(stringToFloat(object.value, separator), separator);
+                object.value = floatToDecimal(stringToFloat(object.value));
             }
-
         }
     </script>
 </body>
