@@ -17,8 +17,9 @@
             --my-navy: #033F68;
             --low-yellow: #f9de99;
             --low-blue: rgb(212, 212, 251);
-            --my-gray: rgba(236, 229, 229, 0.9);
-            --hard-gray: rgba(107, 103, 103, 0.9);
+            --my-gray: rgba(230, 230, 235, 0.9);
+            --low-gray: rgba(240, 240, 255, 0.9);
+            --hard-gray: rgba(40, 40, 70, 0.9);
             --tinted: rgba(0, 0, 0, .7);
             --shadow: rgba(0, 0, 0, .4);
         }
@@ -30,25 +31,24 @@
         body {
             margin: 0px;
             padding: 0px;
-            background-color: white;
-            color: var(--my-navy);
         }
 
         .basic {
             width: 100%;
             padding: 0px 6px 0px 6px;
-            background-color: var(--my-yellow);
+            background-color: var(--hard-gray);
+            color: white;
             font-family: Helvetica, Arial, sans-serif;
             position: fixed;
             display: flex;
             flex-wrap: nowrap;
-            justify-content: center;
             align-items: center;
         }
 
         header {
             top: 0px;
             height: var(--height-header);
+            justify-content: center;
         }
 
         header h1 {
@@ -66,7 +66,7 @@
             top: calc(100% - var(--height-footer));
             height: var(--height-footer);
             font-size: calc(var(--height-footer) - 6px);
-            z-index: 10;
+            justify-content: flex-end;
         }
 
         .square {
@@ -77,7 +77,7 @@
             margin: 5px;
             background-color: var(--my-gray);
             border: 2px solid var(--hard-gray);
-            border-bottom: 12px solid var(--hard-gray);
+            border-bottom-width: 12px;
         }
 
         #result {
@@ -92,7 +92,8 @@
 
         .title {
             padding: 4px;
-            background-color: var(--my-yellow);
+            background-color: var(--hard-gray);
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -122,10 +123,53 @@
             color: var(--my-navy);
         }
 
+        input,
+        button {
+            border: 1px solid var(--hard-gray);
+            border-radius: 2px;
+            outline-color: var(--hard-gray);
+        }
+
+        input[type="checkbox"] {
+            appearance: none;
+            margin-top: 8px;
+            width: 13px;
+            height: 13px;
+            background-color: white;
+            color: white;
+            border: 1px solid var(--hard-gray);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type="checkbox"]::after {
+            font-size: 14px;
+            content: 'x';
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: var(--hard-gray);
+        }
+
+        input[type="button"],
+        input[type="reset"],
+        button {
+            color: var(--my-navy);
+            background-color: var(--low-gray);
+            border-radius: 2px;
+            border-width: 1px;
+        }
+
+        .title>button:hover {
+            box-shadow: 0px 0px 5px white;
+        }
+
         input[type="button"]:hover,
         input[type="reset"]:hover,
         button:hover {
-            box-shadow: 0px 0px 5px var(--my-blue);
+            box-shadow: 0px 0px 5px var(--hard-gray);
         }
 
         #folder {
@@ -480,7 +524,7 @@
     </aside>
 
     <footer class="basic">
-        <p>Desenvolvido por Cleantho</p>
+        <p title="Desenvolvido por Cleantho">Versão 2.1</p>
     </footer>
 
     <script> // Alert window  
